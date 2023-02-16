@@ -59,8 +59,22 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   if (bookReview) {
     let review = req.body.review;
     bookReview = review
-    books[isbn].reviews[username]=username;
+    books[isbn].reviews[username]=review;
     res.send(`Review by ${username} has been updated to '${review}'`);
+  } else {
+    res.send("Review does not exist!");
+  }
+});
+
+// Delete review with username
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const isbn = req.params.isbn;
+  const username = req.session.authorization.username;
+  let bookReview = books[isbn].reviews[username];
+
+  if (bookReview) {
+    delete bookReview
+    res.send(`Review has been deleted by ${username}`);
   } else {
     res.send("Review does not exist!");
   }
